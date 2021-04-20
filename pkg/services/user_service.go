@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/wtfcode/hermes-api/pkg/helpers"
 	"github.com/wtfcode/hermes-api/pkg/models"
 	"gorm.io/gorm"
 )
@@ -18,13 +19,15 @@ type UserService struct {
 	db *gorm.DB
 }
 
+const pageSize = 10
+
 func NewUserService(db *gorm.DB) IUserService {
 	return &UserService{db: db}
 }
 
 func (u *UserService) GetAllUsers(page int) []models.User {
 	users := []models.User{}
-	u.db.Find(&users)
+	u.db.Scopes(helpers.Paginate(page, pageSize)).Find(&users)
 	return users
 }
 
