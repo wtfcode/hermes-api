@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.7.1 // indirect
 	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
 	github.com/jackc/pgx/v4 v4.11.0 // indirect
+	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/klauspost/compress v1.12.1 // indirect
 	github.com/valyala/fasthttp v1.23.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
