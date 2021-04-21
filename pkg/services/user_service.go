@@ -12,7 +12,7 @@ type IUserService interface {
 	GetByUsername(string) (*models.User, error)
 	DeleteUser(int) error
 	UpdateUser(models.User, uint) error
-	CreateUser(models.User) (uint, error)
+	CreateUser(models.User) error
 }
 
 type UserService struct {
@@ -27,13 +27,13 @@ func NewUserService(db *gorm.DB) IUserService {
 
 func (u *UserService) GetAllUsers(page int) []models.User {
 	users := []models.User{}
-	u.db.Scopes(helpers.Paginate(page, pageSize)).Find(&users)
+	u.db.Scopes(helpers.Paginate(page, pageSize)).Select("first_name", "last_name", "email", "username").Find(&users)
 	return users
 }
 
 func (u *UserService) GetByID(id int) (*models.User, error) {
 	var user models.User
-	if err := u.db.First(&user, id).Error; err != nil {
+	if err := u.db.Select("first_name", "last_name", "email", "username").First(&user, id).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -47,11 +47,11 @@ func (u *UserService) GetByUsername(username string) (*models.User, error) {
 	return &user, nil
 }
 
-func (u *UserService) CreateUser(user models.User) (uint, error) {
+func (u *UserService) CreateUser(user models.User) error {
 	if err := u.db.Create(&user).Error; err != nil {
-		return 0, err
+		return err
 	}
-	return user.ID, nil
+	return nil
 }
 
 func (u *UserService) DeleteUser(id int) error {
